@@ -1,7 +1,7 @@
 "use client"
 
-import { JobMatcher } from "@/components/matcher/job-matcher"
+import { JobMatcherNew } from "@/components/matcher/job-matcher-new"
 
 export default function MatcherPage() {
-  return <JobMatcher />
+  return <JobMatcherNew />
 }

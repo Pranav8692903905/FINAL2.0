@@ -16,6 +16,9 @@ import mysql.connector
 from resume_parser import ResumeParser
 from database import Database, ResumeData
 from courses import get_courses_by_field
+from src.helper import extract_text_from_pdf, extract_keywords as local_extract_keywords, analyze_resume as run_analysis
+from src.job_api import fetch_rss_jobs
+from pydantic import BaseModel
 
 load_dotenv()
 
@@ -84,11 +87,10 @@ logger = logging.getLogger("resume_analyzer")
 logging.basicConfig(level=logging.INFO)
 
 # Enable CORS
+# CORS: allow all origins so forwarded URLs (Codespaces/preview) work
 app.add_middleware(
     CORSMiddleware,
-    # Allow any localhost or 127.0.0.1 origin on any port
-    allow_origins=[],
-    allow_origin_regex=r"https?://(localhost|127\\.0\\.0\\.1)(:\\d+)?",
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -198,6 +200,74 @@ async def get_courses(field: str):
         return JSONResponse(content={"courses": courses})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# Job Recommendation Endpoints
+class KeywordsIn(BaseModel):
+    summary: str
+
+class Job(BaseModel):
+    title: str
+    companyName: str
+    location: Optional[str] = None
+    url: Optional[str] = None
+    source: Optional[str] = None
+
+class AnalysisOut(BaseModel):
+    summary: str
+    gaps: str
+    roadmap: str
+
+class JobsOut(BaseModel):
+    jobs: List[Job]
+
+@app.post("/api/analyze/resume", response_model=AnalysisOut)
+async def analyze_resume_endpoint(file: UploadFile = File(...)):
+    """Analyze resume for job matching"""
+    if not file.filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Only PDF files are supported")
+
+    data = await file.read()
+
+    class _U:
+        def __init__(self, b: bytes):
+            self._b = b
+        def read(self):
+            return self._b
+
+    resume_text = extract_text_from_pdf(_U(data))
+    summary, gaps, roadmap = run_analysis(resume_text)
+    return AnalysisOut(summary=summary, gaps=gaps, roadmap=roadmap)
+
+@app.post("/api/keywords")
+async def extract_keywords(body: KeywordsIn):
+    """Extract keywords from resume summary"""
+    keywords, _ = local_extract_keywords(body.summary, limit=12)
+    return {"keywords": keywords}
+
+@app.get("/api/jobs", response_model=JobsOut)
+async def get_jobs(keywords: str, rows: int = 60):
+    """Get job recommendations based on keywords"""
+    try:
+        jobs = fetch_rss_jobs(keywords, rows=rows)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Job search failed: {e}")
+
+    def map_job(j: dict) -> Job:
+        return Job(
+            title=j.get("title", ""),
+            companyName=j.get("companyName", ""),
+            location=j.get("location") or j.get("place") or j.get("city"),
+            url=j.get("url") or j.get("link"),
+            source=j.get("source"),
+        )
+
+    return JobsOut(jobs=[map_job(j) for j in jobs])
+
+@app.get("/api/health")
+async def health():
+    """Health check for job recommendation service"""
+    return {"status": "ok"}
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
