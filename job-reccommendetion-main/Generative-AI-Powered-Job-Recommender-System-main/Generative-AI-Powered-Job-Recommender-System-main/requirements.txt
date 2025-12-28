@@ -1,0 +1,8 @@
+streamlit
+pymupdf 
+python-dotenv
+feedparser
+requests
+fastapi
+uvicorn[standard]
+python-multipart

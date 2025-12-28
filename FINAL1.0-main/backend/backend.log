@@ -1,0 +1,13 @@
+INFO:     Will watch for changes in these directories: ['/workspaces/analyzer/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [50878] using StatReload
+INFO:     Started server process [50883]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:41746 - "GET / HTTP/1.1" 200 OK
+INFO:     157.119.202.59:0 - "POST /upload-resume HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44906 - "GET / HTTP/1.1" 200 OK
+INFO:     157.119.202.59:0 - "GET /admin/stats HTTP/1.1" 200 OK
+INFO:     157.119.202.59:0 - "GET /admin/resumes HTTP/1.1" 200 OK
+INFO:     157.119.202.59:0 - "GET /admin/stats HTTP/1.1" 200 OK
+INFO:     157.119.202.59:0 - "GET /admin/resumes HTTP/1.1" 200 OK
