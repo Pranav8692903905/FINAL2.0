@@ -125,15 +125,20 @@ export function ResumeEditor() {
                     <img
                       src={personalSection.content.photoUrl}
                       alt="Profile"
-                      className="w-20 h-20 rounded-full object-cover"
+                      className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
                     />
                     <div className="flex flex-col space-y-2">
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => {
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault()
                           const input = document.getElementById("photo-upload-replace") as HTMLInputElement
-                          input?.click()
+                          if (input) {
+                            input.value = "" // Reset input to allow same file
+                            input.click()
+                          }
                         }}
                       >
                         Change Photo
@@ -141,7 +146,11 @@ export function ResumeEditor() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => updateSection(personalSection.id, { ...personalSection.content, photoUrl: "" })}
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          updateSection(personalSection.id, { ...personalSection.content, photoUrl: "" })
+                        }}
                       >
                         Remove
                       </Button>
@@ -149,59 +158,118 @@ export function ResumeEditor() {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    <div className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer hover:bg-accent/50 transition">
+                    <div 
+                      className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-accent/50 hover:border-primary transition-all"
+                      onClick={() => {
+                        const input = document.getElementById("photo-upload") as HTMLInputElement
+                        input?.click()
+                      }}
+                    >
                       <input
                         id="photo-upload"
                         type="file"
-                        accept="image/*"
+                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                         className="hidden"
                         onChange={async (e) => {
                           const file = e.target.files?.[0]
                           if (!file) return
+                          
+                          // Validate file size (max 10MB)
+                          if (file.size > 10 * 1024 * 1024) {
+                            alert("File size must be less than 10MB")
+                            return
+                          }
+
                           try {
                             const fd = new FormData()
                             fd.append("photo", file)
                             const res = await fetch("/api/upload", { method: "POST", body: fd })
+                            
+                            if (!res.ok) {
+                              throw new Error(`Upload failed with status: ${res.status}`)
+                            }
+                            
                             const data = await res.json()
+                            console.log("Upload response:", data)
+                            
                             if (data?.url) {
                               updateSection(personalSection.id, { ...personalSection.content, photoUrl: data.url })
+                              alert("Photo uploaded successfully!")
                             } else if (data?.error) {
                               alert("Upload failed: " + data.error)
+                            } else {
+                              alert("Upload failed: No URL returned")
                             }
                           } catch (err) {
                             console.error("Upload failed", err)
-                            alert("Upload failed. Please try again.")
+                            alert("Upload failed: " + (err instanceof Error ? err.message : "Please try again"))
+                          } finally {
+                            // Reset input
+                            e.target.value = ""
                           }
                         }}
                       />
                       <input
                         id="photo-upload-replace"
                         type="file"
-                        accept="image/*"
+                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                         className="hidden"
                         onChange={async (e) => {
                           const file = e.target.files?.[0]
                           if (!file) return
+                          
+                          // Validate file size (max 10MB)
+                          if (file.size > 10 * 1024 * 1024) {
+                            alert("File size must be less than 10MB")
+                            return
+                          }
+
                           try {
                             const fd = new FormData()
                             fd.append("photo", file)
                             const res = await fetch("/api/upload", { method: "POST", body: fd })
+                            
+                            if (!res.ok) {
+                              throw new Error(`Upload failed with status: ${res.status}`)
+                            }
+                            
                             const data = await res.json()
+                            console.log("Upload response:", data)
+                            
                             if (data?.url) {
                               updateSection(personalSection.id, { ...personalSection.content, photoUrl: data.url })
+                              alert("Photo updated successfully!")
                             } else if (data?.error) {
                               alert("Upload failed: " + data.error)
+                            } else {
+                              alert("Upload failed: No URL returned")
                             }
                           } catch (err) {
                             console.error("Upload failed", err)
-                            alert("Upload failed. Please try again.")
+                            alert("Upload failed: " + (err instanceof Error ? err.message : "Please try again"))
+                          } finally {
+                            // Reset input
+                            e.target.value = ""
                           }
                         }}
                       />
-                      <label htmlFor="photo-upload" className="cursor-pointer block">
+                      <div className="flex flex-col items-center justify-center space-y-2">
+                        <svg
+                          className="w-12 h-12 text-muted-foreground"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
+                        </svg>
                         <p className="text-sm font-medium text-muted-foreground">Click to upload photo</p>
-                        <p className="text-xs text-muted-foreground mt-1">PNG, JPG, GIF up to 10MB</p>
-                      </label>
+                        <p className="text-xs text-muted-foreground">PNG, JPG, GIF, WEBP up to 10MB</p>
+                      </div>
                     </div>
                   </div>
                 )}
