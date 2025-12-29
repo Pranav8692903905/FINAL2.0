@@ -41,21 +41,21 @@ export function AIToolsHub() {
     {
       id: 1,
       question: "Tell me about yourself",
-      answer: `**Perfect Answer Structure:**
+      answer: `Perfect Answer Structure:
 
-1. **Present (30 sec):** Current role and key responsibilities
+1. Present (30 sec): Current role and key responsibilities
    "I'm currently a [Role] at [Company], where I [key achievement/responsibility]"
 
-2. **Past (30 sec):** Relevant background and experience
+2. Past (30 sec): Relevant background and experience
    "Before this, I worked at [Previous Company] where I [notable accomplishment]"
 
-3. **Future (30 sec):** Why you're interested in this role
+3. Future (30 sec): Why you're interested in this role
    "I'm excited about this opportunity because [specific reason related to the role]"
 
-**Example:**
+Example:
 "I'm a Full-Stack Developer with 3 years of experience building scalable web applications. Currently at TechCorp, I lead the development of a customer portal that serves 50K+ users. Previously, I worked at StartupXYZ where I built their entire backend infrastructure from scratch. I'm excited about this role because I'm passionate about solving complex problems at scale, and your company's mission to revolutionize [industry] really resonates with me."
 
-**Tips:**
+Tips:
 • Keep it under 2 minutes
 • Be authentic and conversational
 • Connect your story to the role
@@ -64,25 +64,25 @@ export function AIToolsHub() {
     {
       id: 2,
       question: "What are your greatest strengths?",
-      answer: `**How to Answer:**
+      answer: `How to Answer:
 
 Choose 2-3 strengths that are:
 ✓ Relevant to the job description
 ✓ Backed by specific examples
 ✓ Show impact/results
 
-**Structure:**
+Structure:
 1. State the strength
 2. Give a specific example
 3. Show the result/impact
 
-**Example Answer:**
+Example Answer:
 
-"One of my greatest strengths is **problem-solving**. For instance, at my last company, we had a critical system outage affecting 10K users. I quickly identified the root cause in our caching layer, implemented a fix within 2 hours, and then created monitoring alerts to prevent similar issues. This reduced our downtime by 80% that quarter.
+"One of my greatest strengths is problem-solving. For instance, at my last company, we had a critical system outage affecting 10K users. I quickly identified the root cause in our caching layer, implemented a fix within 2 hours, and then created monitoring alerts to prevent similar issues. This reduced our downtime by 80% that quarter.
 
-Another strength is my ability to **communicate complex technical concepts** to non-technical stakeholders. I regularly present to executives and have successfully secured budget approvals for 3 major projects by translating technical requirements into business value."
+Another strength is my ability to communicate complex technical concepts to non-technical stakeholders. I regularly present to executives and have successfully secured budget approvals for 3 major projects by translating technical requirements into business value."
 
-**Strong Strengths to Mention:**
+Strong Strengths to Mention:
 • Problem-solving with examples
 • Leadership and mentoring
 • Adaptability to change
@@ -95,16 +95,16 @@ Remember: Always back it up with PROOF!`
     {
       id: 3,
       question: "What is your greatest weakness?",
-      answer: `**Strategy: Show Self-Awareness + Growth**
+      answer: `Strategy: Show Self-Awareness + Growth
 
-**The Formula:**
+The Formula:
 1. Identify a real (but not critical) weakness
 2. Explain what you're doing to improve
 3. Show progress you've already made
 
-**Example Answer:**
+Example Answer:
 
-"Early in my career, I struggled with **delegating tasks**. I felt I needed to do everything myself to ensure quality. However, I realized this was limiting both my team's growth and my ability to focus on strategic work.
+"Early in my career, I struggled with delegating tasks. I felt I needed to do everything myself to ensure quality. However, I realized this was limiting both my team's growth and my ability to focus on strategic work.
 
 To improve, I started:
 • Identifying team members' strengths and matching tasks accordingly
@@ -113,7 +113,7 @@ To improve, I started:
 
 As a result, I've successfully delegated 3 major projects this year, and my team has grown more confident and skilled. I still check in regularly, but I've learned to trust my team's capabilities."
 
-**Good Weaknesses to Mention:**
+Good Weaknesses to Mention:
 ❌ AVOID: "I'm a perfectionist" or "I work too hard"
 ✅ GOOD:
 • Public speaking (with Toastmasters training)
@@ -121,28 +121,28 @@ As a result, I've successfully delegated 3 major projects this year, and my team
 • Saying no (now using priority frameworks)
 • Technical skill you're actively learning
 
-**Key:** Show you're self-aware and actively improving!`
+Key: Show you're self-aware and actively improving!`
     },
     {
       id: 4,
       question: "Why do you want to work here?",
-      answer: `**What They're Really Asking:**
+      answer: `What They're Really Asking:
 • Did you research our company?
 • Are you genuinely interested or just job hunting?
 • Will you stay long-term?
 
-**Answer Structure:**
+Answer Structure:
 
-1. **Company-Specific Reason** (50%)
+1. Company-Specific Reason (50%)
    Research their mission, products, culture, recent news
 
-2. **Role-Specific Reason** (30%)
+2. Role-Specific Reason (30%)
    How this position aligns with your career goals
 
-3. **Personal Connection** (20%)
+3. Personal Connection (20%)
    What excites YOU about this opportunity
 
-**Example Answer:**
+Example Answer:
 
 "I'm really excited about this opportunity for three main reasons:
 
@@ -152,30 +152,30 @@ Second, this role combines my experience in [skill 1] and [skill 2] while giving
 
 Finally, your company culture of [specific value from research] resonates strongly with me. I've seen reviews from current employees about [specific aspect], and that's the type of environment where I thrive."
 
-**Do Your Homework:**
+Do Your Homework:
 • Read recent news/press releases
 • Check their LinkedIn, blog, social media
 • Review their mission/values page
 • Look at their products/services
 • Check employee reviews (Glassdoor)
 
-**Pro Tip:** Mention something specific that competitors DON'T have!`
+Pro Tip: Mention something specific that competitors DON'T have!`
     },
     {
       id: 5,
       question: "Where do you see yourself in 5 years?",
-      answer: `**What They Want to Know:**
+      answer: `What They Want to Know:
 • Are you committed or just passing through?
 • Are your goals realistic?
 • Does this role fit your career path?
 
-**What NOT to Say:**
+What NOT to Say:
 ❌ "I want YOUR job"
 ❌ "I'll probably go back to school"
 ❌ "I want to start my own company"
 ❌ "I don't know" or overly specific titles
 
-**Answer Strategy:**
+Answer Strategy:
 
 Focus on:
 ✓ Skills you want to develop
@@ -183,15 +183,15 @@ Focus on:
 ✓ General growth trajectory
 ✓ Value you'll bring to the company
 
-**Example Answer:**
+Example Answer:
 
-"In five years, I see myself as a **technical leader** in [specific area relevant to the company]. I want to deepen my expertise in [relevant skill] and mentor junior developers on the team.
+"In five years, I see myself as a technical leader in [specific area relevant to the company]. I want to deepen my expertise in [relevant skill] and mentor junior developers on the team.
 
 I'm particularly interested in [company's focus area], and I'd love to be someone who helps drive innovation in that space. I see myself taking on increasing responsibility, possibly leading larger projects or a small team.
 
 Most importantly, I want to be in an environment where I'm constantly learning and making meaningful contributions. Based on what I've learned about [Company]'s growth trajectory and focus on [specific thing], I believe there will be great opportunities to grow here."
 
-**Alternative Approach (More Specific):**
+Alternative Approach (More Specific):
 
 "In 5 years, I aim to:
 • Become a subject matter expert in [relevant domain]
@@ -201,39 +201,39 @@ Most importantly, I want to be in an environment where I'm constantly learning a
 
 This role seems like the perfect foundation to start that journey."
 
-**Remember:** Show ambition without seeming like you'll leave soon!`
+Remember: Show ambition without seeming like you'll leave soon!`
     },
     {
       id: 6,
       question: "Why did you leave your last job?",
-      answer: `**Golden Rules:**
+      answer: `Golden Rules:
 ❌ NEVER badmouth previous employer
 ❌ NEVER mention conflicts/drama
 ❌ NEVER focus on negatives
 
 ✅ Frame it POSITIVELY about growth
 
-**Safe, Professional Answers:**
+Safe, Professional Answers:
 
-**If Still Employed:**
+If Still Employed:
 "I'm grateful for my time at [Company] and have learned a lot, but I'm looking for new challenges in [specific area]. This role offers [specific opportunity] that I'm excited about."
 
-**If Left for Growth:**
+If Left for Growth:
 "I had reached a ceiling in terms of growth at my previous role. I was looking for opportunities to [skill/responsibility], and this position offers exactly that challenge."
 
-**If Laid Off/Company Issues:**
+If Laid Off/Company Issues:
 "The company underwent restructuring and my position was eliminated along with [X%] of the team. I'm grateful for the experience I gained there in [skills], and I'm now looking to apply those skills in a more stable, growing environment like yours."
 
-**If Cultural Misfit:**
+If Cultural Misfit:
 "While I learned valuable skills at [Company], I realized I thrive in environments that [value that THIS company has]. From my research, your company culture emphasizes [specific thing], which aligns perfectly with how I work best."
 
-**If Better Opportunity:**
+If Better Opportunity:
 "I wasn't actively looking, but when I learned about this opportunity with [Company], I couldn't pass it up. The chance to work on [specific project/technology] and contribute to [company mission] was too compelling."
 
-**If Short Tenure (< 1 year):**
+If Short Tenure (< 1 year):
 "I took the role hoping it would involve [X], but it turned out to be more focused on [Y]. I realized quickly this wasn't the right fit, and rather than waste anyone's time, I decided to find a role that better matches my skills in [relevant area], like this one."
 
-**Pro Tips:**
+Pro Tips:
 • Keep it brief (30 seconds max)
 • Pivot to why THIS role is better
 • Show what you learned from the experience
@@ -242,22 +242,22 @@ This role seems like the perfect foundation to start that journey."
     {
       id: 7,
       question: "Describe a challenging situation and how you handled it",
-      answer: `**Use the STAR Method:**
+      answer: `Use the STAR Method:
 
-**S**ituation - Set the context (20%)
-**T**ask - Explain your responsibility (10%)
-**A**ction - Describe what YOU did (50%)
-**R**esult - Share the outcome with metrics (20%)
+Situation - Set the context (20%)
+Task - Explain your responsibility (10%)
+Action - Describe what YOU did (50%)
+Result - Share the outcome with metrics (20%)
 
-**Example Answer:**
+Example Answer:
 
-**Situation:**
+Situation:
 "At my previous company, we had a major product launch scheduled in 2 weeks, but our QA team discovered critical bugs that would typically take 4 weeks to fix."
 
-**Task:**
+Task:
 "As the lead developer, I was responsible for ensuring we launched on time without compromising quality."
 
-**Action:**
+Action:
 "I took several steps:
 1. Prioritized bugs by impact - identified 5 critical vs. 15 nice-to-haves
 2. Reorganized the team into pairs to tackle critical issues faster
@@ -266,99 +266,99 @@ This role seems like the perfect foundation to start that journey."
 5. Personally worked extra hours on the most complex bug
 6. Set up automated regression tests to prevent similar issues"
 
-**Result:**
+Result:
 "We launched on time with all critical bugs fixed. The product received 4.5/5 stars in first reviews, zero critical post-launch issues, and exceeded first-week download targets by 30%. The pairing strategy worked so well we adopted it permanently, reducing bug resolution time by 40%."
 
-**More Example Scenarios:**
+More Example Scenarios:
 
-**Conflict Resolution:**
+Conflict Resolution:
 - Disagreement with colleague
 - Team member not performing
 - Client unhappy with deliverable
 
-**Tight Deadlines:**
+Tight Deadlines:
 - Impossible timeline
 - Resource constraints
 - Competing priorities
 
-**Technical Challenges:**
+Technical Challenges:
 - System failure/outage
 - Complex problem no one could solve
 - Learning new technology quickly
 
-**Leadership:**
+Leadership:
 - Taking initiative on project
 - Mentoring struggling team member
 - Driving change in process
 
-**Keys to Success:**
+Keys to Success:
 ✓ Pick a story with a POSITIVE outcome
 ✓ Focus on YOUR actions (not "we")
 ✓ Use specific numbers/metrics
 ✓ Show problem-solving and leadership
 ✓ End with what you LEARNED
 
-**Practice 3-4 STAR stories before interviews!**`
+Practice 3-4 STAR stories before interviews!`
     },
     {
       id: 8,
       question: "Do you have any questions for us?",
-      answer: `**ALWAYS Ask Questions - It Shows:**
+      answer: `ALWAYS Ask Questions - It Shows:
 • You did research
 • You're genuinely interested  
 • You're evaluating fit too
 • You're thinking strategically
 
-**❌ NEVER Ask:**
+❌ NEVER Ask:
 - "What does your company do?" (research!)
 - Salary/benefits in first interview
 - "How did I do?" or "Did I get the job?"
 - Anything answered on their website
 - "No, I'm good" (NEVER say this!)
 
-**✅ GREAT Questions to Ask:**
+✅ GREAT Questions to Ask:
 
-**About the Role:**
+About the Role:
 1. "What does success look like in this role in the first 90 days?"
 2. "What are the biggest challenges someone in this position would face?"
 3. "Can you walk me through a typical day/week?"
 4. "How is performance measured for this role?"
 5. "Why is this position open? New role or backfill?"
 
-**About the Team:**
+About the Team:
 6. "Can you tell me about the team I'd be working with?"
 7. "What's the team's dynamic and collaboration style?"
 8. "How does this role interact with other departments?"
 9. "What do you enjoy most about working with this team?"
 
-**About Growth:**
+About Growth:
 10. "What opportunities are there for professional development?"
 11. "What's the career path for someone in this role?"
 12. "How does the company support continued learning?"
 13. "Are there mentorship programs available?"
 
-**About the Company:**
+About the Company:
 14. "What are the company's goals for the next year?"
 15. "How would you describe the company culture?"
 16. "What makes your top performers successful here?"
 17. "What's the biggest challenge the company is facing right now?"
 
-**Strategic Questions:**
+Strategic Questions:
 18. "What's the vision for [department] in the next 2-3 years?"
 19. "How does this role contribute to the company's key objectives?"
 20. "What emerging technologies/trends are you most excited about?"
 
-**To the Interviewer Personally:**
+To the Interviewer Personally:
 21. "What's your favorite thing about working here?"
 22. "What surprised you most after joining the company?"
 23. "How long have you been here, and what's kept you?"
 
-**Next Steps:**
+Next Steps:
 24. "What are the next steps in the interview process?"
 25. "When can I expect to hear back?"
 26. "Is there anything about my background you'd like me to clarify?"
 
-**Pro Tips:**
+Pro Tips:
 • Prepare 8-10 questions
 • Ask 3-4 per interview (they'll answer some)
 • Take notes during their answers
@@ -366,7 +366,7 @@ This role seems like the perfect foundation to start that journey."
 • Save compensation talk for later rounds
 • Show enthusiasm in your questions!
 
-**The Best Question:**
+The Best Question:
 "Based on our conversation, do you have any concerns about my fit for this role that I can address?"
 (Shows confidence and gives you a chance to overcome objections!)`
     }
@@ -377,50 +377,50 @@ This role seems like the perfect foundation to start that journey."
 
     if (msg.includes("interview") || msg.includes("preparation") || msg.includes("prep")) {
       setShowQuestions(true)
-      return `🎤 **Interview Preparation - Common Questions:**
+      return `🎤 Interview Preparation - Common Questions:
 
 I've prepared detailed answers for 8 most common interview questions. Click on any question below to see the complete answer with examples and tips!`
     }
 
     if (msg.includes("resume") || msg.includes("cv")) {
-      return `📄 **Resume Optimization Tips:**
+      return `📄 Resume Optimization Tips:
 
-1. **Use Action Verbs**: Start bullet points with powerful verbs like "Led," "Developed," "Increased," "Managed"
+1. Use Action Verbs: Start bullet points with powerful verbs like "Led," "Developed," "Increased," "Managed"
 
-2. **Quantify Achievements**: Include numbers and metrics
+2. Quantify Achievements: Include numbers and metrics
    • "Increased sales by 35%" vs "Responsible for sales"
 
-3. **Tailor for Each Job**: Customize your resume to match job descriptions using relevant keywords
+3. Tailor for Each Job: Customize your resume to match job descriptions using relevant keywords
 
-4. **Keep it Concise**: Aim for 1-2 pages, use bullet points for easy scanning
+4. Keep it Concise: Aim for 1-2 pages, use bullet points for easy scanning
 
-5. **ATS-Friendly Format**: Use standard fonts, avoid tables/images in content areas
+5. ATS-Friendly Format: Use standard fonts, avoid tables/images in content areas
 
-6. **Skills Section**: List both hard and soft skills relevant to your target role
+6. Skills Section: List both hard and soft skills relevant to your target role
 
-7. **Professional Summary**: Write a compelling 2-3 line summary at the top
+7. Professional Summary: Write a compelling 2-3 line summary at the top
 
 Would you like specific help with any section?`
     }
 
     if (msg.includes("cover letter")) {
-      return `💼 **Cover Letter Suggestions:**
+      return `💼 Cover Letter Suggestions:
 
-1. **Personalize the Opening**: Address the hiring manager by name when possible
+1. Personalize the Opening: Address the hiring manager by name when possible
 
-2. **Strong First Paragraph**: Hook them with why you're excited about THIS specific role
+2. Strong First Paragraph: Hook them with why you're excited about THIS specific role
 
-3. **Showcase Achievements**: Pick 2-3 relevant accomplishments from your resume and expand on them
+3. Showcase Achievements: Pick 2-3 relevant accomplishments from your resume and expand on them
 
-4. **Company Research**: Mention specific things about the company that resonate with you
+4. Company Research: Mention specific things about the company that resonate with you
 
-5. **Connect Your Skills**: Directly link your experience to their requirements
+5. Connect Your Skills: Directly link your experience to their requirements
 
-6. **Call to Action**: End with enthusiasm and request for an interview
+6. Call to Action: End with enthusiasm and request for an interview
 
-7. **Keep it Brief**: Max 3-4 paragraphs, one page
+7. Keep it Brief: Max 3-4 paragraphs, one page
 
-**Template Structure:**
+Template Structure:
 • Para 1: Why this role excites you
 • Para 2-3: Your relevant achievements & skills
 • Para 4: Thank you & call to action
@@ -429,27 +429,27 @@ Need help with a specific cover letter?`
     }
 
     if (msg.includes("career") || msg.includes("advice") || msg.includes("job")) {
-      return `🎯 **Career Advice:**
+      return `🎯 Career Advice:
 
-**Job Search Strategy:**
+Job Search Strategy:
 • Apply to 10-15 targeted positions weekly
 • Network on LinkedIn (comment, share, connect)
 • Set up job alerts on multiple platforms
 • Follow up on applications after 1 week
 
-**Skills Development:**
+Skills Development:
 • Identify in-demand skills in your field
 • Take online courses (Coursera, Udemy, LinkedIn Learning)
 • Build a portfolio of projects
 • Stay updated with industry trends
 
-**Interview Preparation:**
+Interview Preparation:
 • Research the company thoroughly
 • Prepare STAR method stories for common questions
 • Practice with mock interviews
 • Prepare thoughtful questions for the interviewer
 
-**Salary Negotiation:**
+Salary Negotiation:
 • Research market rates for your role
 • Wait for them to make the first offer
 • Focus on your value, not personal needs
@@ -459,32 +459,32 @@ What specific career challenge can I help with?`
     }
 
     if (msg.includes("linkedin") || msg.includes("profile")) {
-      return `📝 **LinkedIn Profile Enhancement:**
+      return `📝 LinkedIn Profile Enhancement:
 
-1. **Professional Photo**: Use a high-quality headshot with a plain background
+1. Professional Photo: Use a high-quality headshot with a plain background
 
-2. **Compelling Headline**: More than just job title
+2. Compelling Headline: More than just job title
    • Bad: "Software Engineer"
    • Good: "Full-Stack Developer | Building Scalable Web Apps | React & Node.js"
 
-3. **About Section**: Write in first person, tell your story
+3. About Section: Write in first person, tell your story
    • Who you are, what you do, what you're passionate about
    • Include keywords for SEO
    • Add a call-to-action
 
-4. **Experience Section**: Mirror your resume but can be more detailed
+4. Experience Section: Mirror your resume but can be more detailed
    • Use media (images, links, presentations)
    • Highlight achievements with metrics
 
-5. **Skills & Endorsements**: List 20+ relevant skills, prioritize top 3
+5. Skills & Endorsements: List 20+ relevant skills, prioritize top 3
 
-6. **Recommendations**: Request from colleagues, managers, clients
+6. Recommendations: Request from colleagues, managers, clients
 
-7. **Engagement**: Post regularly, comment on others' content, share insights
+7. Engagement: Post regularly, comment on others' content, share insights
 
-8. **Custom URL**: Change to linkedin.com/in/yourname
+8. Custom URL: Change to linkedin.com/in/yourname
 
-9. **Featured Section**: Showcase your best work, articles, projects
+9. Featured Section: Showcase your best work, articles, projects
 
 Want help optimizing a specific section?`
     }
@@ -800,7 +800,7 @@ Just ask me about any of these topics, and I'll provide detailed guidance!`
                             const messageId = Date.now().toString()
                             const answerMessage: Message = {
                               id: messageId,
-                              text: `**${q.question}**\n\n${q.answer}`,
+                              text: `${q.question}\n\n${q.answer}`,
                               sender: "bot",
                               timestamp: new Date(),
                             }
