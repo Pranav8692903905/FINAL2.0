@@ -15,23 +15,28 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BACKEND_DIR="$SCRIPT_DIR/backend"
+FRONTEND_DIR="$SCRIPT_DIR/RESUME-BUILDER2-main"
+
 # Check if dependencies are installed
 echo -e "${YELLOW}Checking dependencies...${NC}"
 
 # Check backend dependencies
-if [ ! -d "/workspaces/FINAL1.0/backend/__pycache__" ] && [ ! -f "/workspaces/FINAL1.0/backend/.dependencies_installed" ]; then
+if [ ! -f "$BACKEND_DIR/.dependencies_installed" ]; then
     echo -e "${YELLOW}⚠ Backend dependencies not found!${NC}"
     echo -e "${BLUE}Installing backend dependencies...${NC}"
-    cd /workspaces/FINAL1.0/backend
+    cd "$BACKEND_DIR"
     pip install -q -r requirements.txt && touch .dependencies_installed
     echo -e "${GREEN}✓ Backend dependencies installed${NC}"
 fi
 
 # Check frontend dependencies
-if [ ! -d "/workspaces/FINAL1.0/RESUME-BUILDER2-main/node_modules" ]; then
+if [ ! -d "$FRONTEND_DIR/node_modules" ]; then
     echo -e "${YELLOW}⚠ Frontend dependencies not found!${NC}"
     echo -e "${BLUE}Installing frontend dependencies (this may take a minute)...${NC}"
-    cd /workspaces/FINAL1.0/RESUME-BUILDER2-main
+    cd "$FRONTEND_DIR"
     npm install --silent
     echo -e "${GREEN}✓ Frontend dependencies installed${NC}"
 fi
@@ -49,7 +54,7 @@ echo ""
 
 # Start Backend
 echo -e "${YELLOW}[2/5] Starting FastAPI Backend...${NC}"
-cd /workspaces/FINAL1.0/backend
+cd "$BACKEND_DIR"
 python3 main.py > /tmp/backend.log 2>&1 &
 BACKEND_PID=$!
 echo -e "${GREEN}✓ Backend started (PID: $BACKEND_PID)${NC}"
@@ -68,7 +73,7 @@ echo ""
 
 # Start Frontend
 echo -e "${YELLOW}[4/5] Starting Next.js Frontend...${NC}"
-cd /workspaces/FINAL1.0/RESUME-BUILDER2-main
+cd "$FRONTEND_DIR"
 npm run dev > /tmp/frontend.log 2>&1 &
 FRONTEND_PID=$!
 echo -e "${GREEN}✓ Frontend started (PID: $FRONTEND_PID)${NC}"

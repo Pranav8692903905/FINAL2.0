@@ -79,6 +79,251 @@ export function ResumeAnalyzer() {
     return "text-red-500"
   }
 
+  const downloadReport = () => {
+    if (!analysisData) return
+
+    try {
+      // Create HTML content for the report
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <title>Resume Analysis Report - ${analysisData.name}</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
+              background-color: #f5f5f5;
+            }
+            .container {
+              max-width: 900px;
+              margin: 0 auto;
+              background-color: white;
+              padding: 30px;
+              border-radius: 8px;
+              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            .header {
+              text-align: center;
+              border-bottom: 2px solid #3b82f6;
+              padding-bottom: 20px;
+              margin-bottom: 30px;
+            }
+            .title {
+              font-size: 28px;
+              font-weight: bold;
+              color: #1f2937;
+              margin: 0;
+            }
+            .filename {
+              color: #6b7280;
+              font-size: 14px;
+              margin-top: 5px;
+            }
+            .score-section {
+              text-align: center;
+              padding: 20px;
+              background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+              color: white;
+              border-radius: 8px;
+              margin-bottom: 30px;
+            }
+            .score-value {
+              font-size: 48px;
+              font-weight: bold;
+              margin: 10px 0;
+            }
+            .score-label {
+              font-size: 14px;
+              opacity: 0.9;
+            }
+            .section {
+              margin-bottom: 30px;
+            }
+            .section-title {
+              font-size: 18px;
+              font-weight: bold;
+              color: #1f2937;
+              border-bottom: 1px solid #e5e7eb;
+              padding-bottom: 10px;
+              margin-bottom: 15px;
+            }
+            .info-grid {
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              gap: 20px;
+              margin-bottom: 20px;
+            }
+            .info-item {
+              padding: 15px;
+              background-color: #f9fafb;
+              border-radius: 6px;
+            }
+            .info-label {
+              color: #6b7280;
+              font-size: 12px;
+              font-weight: bold;
+              text-transform: uppercase;
+              margin-bottom: 5px;
+            }
+            .info-value {
+              color: #1f2937;
+              font-size: 16px;
+              font-weight: bold;
+            }
+            .badges {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 8px;
+              margin-bottom: 15px;
+            }
+            .badge {
+              display: inline-block;
+              padding: 6px 12px;
+              background-color: #e0f2fe;
+              color: #0369a1;
+              border-radius: 20px;
+              font-size: 13px;
+              border: 1px solid #bae6fd;
+            }
+            .badge.recommended {
+              background-color: #fef3c7;
+              color: #b45309;
+              border-color: #fde68a;
+            }
+            .courses-list {
+              list-style: none;
+              padding: 0;
+            }
+            .course-item {
+              padding: 12px;
+              background-color: #f0f9ff;
+              border-left: 4px solid #3b82f6;
+              margin-bottom: 10px;
+              border-radius: 4px;
+            }
+            .footer {
+              text-align: center;
+              border-top: 1px solid #e5e7eb;
+              padding-top: 20px;
+              margin-top: 30px;
+              color: #6b7280;
+              font-size: 12px;
+            }
+            @media (max-width: 600px) {
+              .info-grid {
+                grid-template-columns: 1fr;
+              }
+              .container {
+                padding: 15px;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 class="title">Resume Analysis Report</h1>
+              <p class="filename">${analysisData.filename}</p>
+            </div>
+
+            <div class="score-section">
+              <div class="score-label">Overall Score</div>
+              <div class="score-value">${analysisData.score}/100</div>
+              <div class="score-label">${analysisData.score >= 80 ? 'Excellent' : analysisData.score >= 60 ? 'Good' : 'Needs Improvement'}</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Candidate Information</div>
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-label">Name</div>
+                  <div class="info-value">${analysisData.name || 'N/A'}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Email</div>
+                  <div class="info-value">${analysisData.email || 'N/A'}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Phone</div>
+                  <div class="info-value">${analysisData.phone || 'N/A'}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Pages</div>
+                  <div class="info-value">${analysisData.pages}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Career Profile</div>
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-label">Field</div>
+                  <div class="info-value">${analysisData.field}</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Experience Level</div>
+                  <div class="info-value">${analysisData.level}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Detected Skills (${analysisData.skills.length})</div>
+              <div class="badges">
+                ${analysisData.skills.map(skill => `<span class="badge">${skill}</span>`).join('')}
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">Recommended Skills to Add</div>
+              <div class="badges">
+                ${analysisData.recommended_skills.map(skill => `<span class="badge recommended">+ ${skill}</span>`).join('')}
+              </div>
+            </div>
+
+            ${analysisData.courses.length > 0 ? `
+            <div class="section">
+              <div class="section-title">Recommended Courses</div>
+              <ul class="courses-list">
+                ${analysisData.courses.map(course => `
+                  <li class="course-item">
+                    <strong>${course.name}</strong><br>
+                    <small style="color: #0369a1; text-decoration: underline;">${course.url}</small>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+            ` : ''}
+
+            <div class="footer">
+              <p>Generated on ${new Date().toLocaleString()}</p>
+              <p>This report was generated by Resume Analyzer AI</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+
+      // Create a blob and download
+      const element = document.createElement('a')
+      const file = new Blob([htmlContent], { type: 'text/html' })
+      element.href = URL.createObjectURL(file)
+      element.download = `Resume-Analysis-Report-${analysisData.name.replace(/\s+/g, '-')}-${new Date().getTime()}.html`
+      document.body.appendChild(element)
+      element.click()
+      document.body.removeChild(element)
+      
+      // Show success message
+      alert('Report downloaded successfully!')
+    } catch (err) {
+      console.error('Download failed:', err)
+      alert('Failed to download report. Please try again.')
+    }
+  }
+
   return (
     <div
       className="min-h-screen bg-background"
@@ -291,7 +536,14 @@ export function ResumeAnalyzer() {
             </Card>
 
             {/* Action Buttons */}
-            <div className="flex justify-center gap-4">
+            <div className="flex justify-center gap-4 flex-wrap">
+              <Button
+                onClick={downloadReport}
+                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-lg"
+              >
+                <FileText className="mr-2 h-5 w-5" />
+                Download Report
+              </Button>
               <Button
                 onClick={() => {
                   setAnalysisData(null)
@@ -302,7 +554,6 @@ export function ResumeAnalyzer() {
               >
                 Analyze Another Resume
               </Button>
-              <Button>Download Report</Button>
             </div>
           </div>
         )}

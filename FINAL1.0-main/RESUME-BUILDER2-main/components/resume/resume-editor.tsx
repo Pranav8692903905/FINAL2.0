@@ -53,28 +53,57 @@ export function ResumeEditor() {
                   id="email"
                   type="email"
                   value={personalSection.content.email || ""}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const email = e.target.value
                     updateSection(personalSection.id, {
                       ...personalSection.content,
-                      email: e.target.value,
+                      email: email,
                     })
-                  }
+                  }}
+                  onBlur={(e) => {
+                    const email = e.target.value
+                    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                      alert("Please enter a valid email address")
+                    }
+                  }}
                   placeholder="john@example.com"
+                  className={personalSection.content.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personalSection.content.email) ? "border-red-500" : ""}
                 />
+                {personalSection.content.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personalSection.content.email) && (
+                  <p className="text-xs text-red-500 mt-1">Invalid email format</p>
+                )}
               </div>
               <div>
-                <Label htmlFor="phone">Phone</Label>
+                <Label htmlFor="phone">Phone (10 digits only)</Label>
                 <Input
                   id="phone"
+                  type="tel"
+                  maxLength={10}
                   value={personalSection.content.phone || ""}
-                  onChange={(e) =>
-                    updateSection(personalSection.id, {
-                      ...personalSection.content,
-                      phone: e.target.value,
-                    })
-                  }
-                  placeholder="+1 (555) 123-4567"
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "") // Only allow digits
+                    if (value.length <= 10) {
+                      updateSection(personalSection.id, {
+                        ...personalSection.content,
+                        phone: value,
+                      })
+                    }
+                  }}
+                  onBlur={(e) => {
+                    const phone = e.target.value
+                    if (phone && phone.length !== 10) {
+                      alert("Phone number must be exactly 10 digits")
+                    }
+                  }}
+                  placeholder="9876543210"
+                  className={personalSection.content.phone && personalSection.content.phone.length !== 10 ? "border-red-500" : ""}
                 />
+                {personalSection.content.phone && personalSection.content.phone.length !== 10 && (
+                  <p className="text-xs text-red-500 mt-1">{personalSection.content.phone.length}/10 digits</p>
+                )}
+                {personalSection.content.phone && personalSection.content.phone.length === 10 && (
+                  <p className="text-xs text-green-500 mt-1">✓ Valid phone number</p>
+                )}
               </div>
               <div>
                 <Label htmlFor="location">Location</Label>
@@ -383,10 +412,16 @@ export function ResumeEditor() {
                     <Label>Start Date</Label>
                     <Input
                       type="month"
+                      max="2025-12"
                       value={exp.startDate}
                       onChange={(e) => {
+                        const selectedDate = e.target.value
+                        if (selectedDate && selectedDate > "2025-12") {
+                          alert("Date cannot be after December 2025")
+                          return
+                        }
                         const updated = [...experienceSection.content]
-                        updated[index] = { ...updated[index], startDate: e.target.value }
+                        updated[index] = { ...updated[index], startDate: selectedDate }
                         updateSection(experienceSection.id, updated)
                       }}
                     />
@@ -395,10 +430,16 @@ export function ResumeEditor() {
                     <Label>End Date</Label>
                     <Input
                       type="month"
+                      max="2025-12"
                       value={exp.endDate}
                       onChange={(e) => {
+                        const selectedDate = e.target.value
+                        if (selectedDate && selectedDate > "2025-12") {
+                          alert("Date cannot be after December 2025")
+                          return
+                        }
                         const updated = [...experienceSection.content]
-                        updated[index] = { ...updated[index], endDate: e.target.value }
+                        updated[index] = { ...updated[index], endDate: selectedDate }
                         updateSection(experienceSection.id, updated)
                       }}
                       disabled={exp.current}
@@ -527,10 +568,16 @@ export function ResumeEditor() {
                     <Label>Start Date</Label>
                     <Input
                       type="month"
+                      max="2025-12"
                       value={edu.startDate}
                       onChange={(e) => {
+                        const selectedDate = e.target.value
+                        if (selectedDate && selectedDate > "2025-12") {
+                          alert("Date cannot be after December 2025")
+                          return
+                        }
                         const updated = [...educationSection.content]
-                        updated[index] = { ...updated[index], startDate: e.target.value }
+                        updated[index] = { ...updated[index], startDate: selectedDate }
                         updateSection(educationSection.id, updated)
                       }}
                     />
@@ -539,10 +586,16 @@ export function ResumeEditor() {
                     <Label>End Date</Label>
                     <Input
                       type="month"
+                      max="2025-12"
                       value={edu.endDate}
                       onChange={(e) => {
+                        const selectedDate = e.target.value
+                        if (selectedDate && selectedDate > "2025-12") {
+                          alert("Date cannot be after December 2025")
+                          return
+                        }
                         const updated = [...educationSection.content]
-                        updated[index] = { ...updated[index], endDate: e.target.value }
+                        updated[index] = { ...updated[index], endDate: selectedDate }
                         updateSection(educationSection.id, updated)
                       }}
                     />

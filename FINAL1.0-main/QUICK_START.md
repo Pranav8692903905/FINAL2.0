@@ -1,53 +1,97 @@
 # 🎯 Quick Start Guide - Resume Analyzer
 
-## ⚡ Current Status: ✅ RUNNING
+## ⚡ Current Status: ✅ FULLY OPERATIONAL
 
 ✅ **Backend:** FastAPI on http://localhost:8000  
 ✅ **Frontend:** Next.js on http://localhost:3000  
 ✅ **Database:** SQLite ready  
 ✅ **All Dependencies:** Installed  
+✅ **All Tests:** Passing (11/11)
 
 ---
 
 ## 🚀 How to Start
 
-### Option 1: Automated Setup (Recommended)
+### Option 1: Automated Setup (Recommended) ⭐
 ```bash
-./SETUP_INSTRUCTIONS.sh
+cd /workspaces/FINAL2.0/FINAL1.0-main
+./start-all.sh
 ```
 
 ### Option 2: Manual Setup
 ```bash
 # Terminal 1 - Backend
-cd /workspaces/FINAL1.0/backend
+cd /workspaces/FINAL2.0/FINAL1.0-main/backend
 python3 main.py
 
 # Terminal 2 - Frontend  
-cd /workspaces/FINAL1.0/RESUME-BUILDER2-main
+cd /workspaces/FINAL2.0/FINAL1.0-main/RESUME-BUILDER2-main
 npm run dev
+```
+
+### Option 3: Health Check
+```bash
+# Verify everything is working
+cd /workspaces/FINAL2.0/FINAL1.0-main
+./health-check.sh
 ```
 
 ---
 
 ## 📍 Access Your Application
 
-### Main URL:
-👉 **http://localhost:3000/analyzer**
+### 🎯 Main URLs:
+- **Analyzer:** http://localhost:3000/analyzer 👈 **START HERE**
+- **Builder:** http://localhost:3000/builder
+- **Dashboard:** http://localhost:3000/dashboard
+- **Homepage:** http://localhost:3000
+
+### 🔧 Backend URLs:
+- **API:** http://localhost:8000
+- **Health:** http://localhost:8000/api/health
+- **Admin:** http://localhost:8000/admin/stats
 
 ---
 
 ## 🎓 How to Use
 
-### 1. Upload a Resume
+### 1. Upload & Analyze Resume 📄
 - Go to http://localhost:3000/analyzer
 - Click the upload area
 - Select a PDF resume
 - Click "Analyze Resume"
+- Get instant AI-powered analysis!
 
-### 2. Get Analysis Results
+### 2. View Analysis Results 📊
 Your resume will be analyzed for:
-- ✅ Overall score
+- ✅ Overall score (out of 100)
 - ✅ Detected skills
+- ✅ Experience level
+- ✅ Education details
+- ✅ Recommended skills to add
+- ✅ Relevant courses to improve
+- ✅ Career field suggestion
+
+### 3. Build Your Resume ✍️
+- Go to http://localhost:3000/builder
+- Fill in your information:
+  - Personal details (with photo upload)
+  - Professional summary
+  - Work experience
+  - Education
+  - Skills
+  - Projects
+- Choose a template (Modern/Minimal/Professional)
+- Download as PDF
+
+### 4. Features & Validations 🛡️
+- **Phone:** 10 digits only (auto-validates)
+- **Email:** Proper format required
+- **Dates:** Maximum December 2025
+- **Photo:** Max 10MB, JPEG/PNG/GIF/WEBP
+- **Real-time validation feedback**
+
+---
 - ✅ Career field prediction
 - ✅ Experience level
 - ✅ Recommended skills to add
