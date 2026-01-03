@@ -17,7 +17,16 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json()
-    return NextResponse.json(data)
+
+    // Normalize course links so the frontend always receives { name, url }
+    const courses = Array.isArray(data.courses)
+      ? data.courses.map((course: any) => ({
+          name: course?.name,
+          url: course?.url || course?.link || "",
+        }))
+      : []
+
+    return NextResponse.json({ ...data, courses })
   } catch (error) {
     console.error("API error:", error)
     return NextResponse.json(

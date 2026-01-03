@@ -104,75 +104,108 @@ async def root():
 async def upload_resume(file: UploadFile = File(...)):
     """Upload and analyze resume"""
     try:
+        if not file:
+            raise HTTPException(status_code=400, detail="No file provided")
+        
         # Validate file type (case-insensitive)
+        if not file.filename:
+            raise HTTPException(status_code=400, detail="Invalid filename")
+        
         ext = Path(file.filename).suffix.lower()
         if ext != '.pdf':
-            raise HTTPException(status_code=400, detail="Only PDF files are supported")
+            raise HTTPException(status_code=400, detail="Only PDF files are supported. Please upload a .pdf file.")
+        
+        # Validate file size (max 10MB)
+        file_content = await file.read()
+        file_size = len(file_content)
+        if file_size == 0:
+            raise HTTPException(status_code=400, detail="File is empty")
+        if file_size > 10 * 1024 * 1024:
+            raise HTTPException(status_code=400, detail="File size exceeds 10MB limit")
         
         # Save uploaded file
-        file_path = UPLOAD_DIR / file.filename
+        UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        file_path = UPLOAD_DIR / f"{timestamp}_{file.filename}"
+        
         with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
+            buffer.write(file_content)
+        
+        logger.info(f"File saved: {file_path}")
         
         # Parse resume
         parser = ResumeParser(str(file_path))
         try:
             resume_data = parser.extract_data()
+            logger.info(f"Resume parsed successfully: {resume_data['name']}")
         except Exception as parse_err:
             logger.exception("Failed to parse resume")
-            raise HTTPException(status_code=400, detail="Could not read the PDF. Ensure it is not password-protected or corrupted.") from parse_err
+            raise HTTPException(status_code=400, detail=f"Could not read the PDF: {str(parse_err)}") from parse_err
         
         # Analyze skills and recommend field
-        analysis = parser.analyze_skills(resume_data['skills'])
+        try:
+            analysis = parser.analyze_skills(resume_data['skills'])
+            logger.info(f"Skills analysis complete: {analysis['field']}")
+        except Exception as analysis_err:
+            logger.exception("Failed to analyze skills")
+            analysis = {'field': 'General IT', 'level': 'Intermediate', 'recommended_skills': []}
         
         # Calculate resume score
-        score = parser.calculate_score(resume_data, analysis)
+        try:
+            score = parser.calculate_score(resume_data, analysis)
+        except Exception as score_err:
+            logger.exception("Failed to calculate score")
+            score = 50
         
         # Get recommended courses
-        courses = get_courses_by_field(analysis['field'])
+        try:
+            courses = get_courses_by_field(analysis['field'])
+        except Exception as course_err:
+            logger.exception("Failed to get courses")
+            courses = []
         
         # Prepare response
         response_data = {
-            "name": resume_data['name'],
-            "email": resume_data['email'],
-            "phone": resume_data['phone'],
-            "pages": resume_data['pages'],
-            "skills": resume_data['skills'],
-            "experience": resume_data['experience'],
-            "education": resume_data['education'],
+            "name": resume_data.get('name', 'Unknown'),
+            "email": resume_data.get('email', 'N/A'),
+            "phone": resume_data.get('phone', 'N/A'),
+            "pages": resume_data.get('pages', 1),
+            "skills": resume_data.get('skills', []),
+            "experience": resume_data.get('experience', 'Fresher'),
+            "education": resume_data.get('education', []),
             "score": score,
-            "level": analysis['level'],
-            "field": analysis['field'],
-            "recommended_skills": analysis['recommended_skills'],
-            "courses": courses[:5],
+            "level": analysis.get('level', 'Fresher'),
+            "field": analysis.get('field', 'General IT'),
+            "recommended_skills": analysis.get('recommended_skills', []),
+            "courses": courses[:5] if courses else [],
             "filename": file.filename
         }
         
-        # Save to database
+        # Save to database (non-blocking)
         try:
             db.insert_resume_data(ResumeData(
-                name=resume_data['name'],
-                email=resume_data['email'],
+                name=response_data['name'],
+                email=response_data['email'],
                 resume_score=score,
                 timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                page_no=resume_data['pages'],
-                predicted_field=analysis['field'],
-                user_level=analysis['level'],
-                actual_skills=", ".join(resume_data['skills']),
-                recommended_skills=", ".join(analysis['recommended_skills']),
-                recommended_courses=", ".join([c['name'] for c in courses[:5]])
+                page_no=response_data['pages'],
+                predicted_field=response_data['field'],
+                user_level=response_data['level'],
+                actual_skills=", ".join(response_data['skills']) if response_data['skills'] else "",
+                recommended_skills=", ".join(response_data['recommended_skills']) if response_data['recommended_skills'] else "",
+                recommended_courses=", ".join([c['name'] for c in courses[:5]]) if courses else ""
             ))
+            logger.info(f"Resume data saved to database: {response_data['name']}")
         except Exception as db_err:
-            logger.exception("Database insert failed")
-            raise HTTPException(status_code=500, detail="Database error while saving analysis. Please try again.") from db_err
+            logger.warning(f"Database insert failed (non-critical): {str(db_err)}")
         
-        return JSONResponse(content=response_data)
+        return JSONResponse(content=response_data, status_code=200)
     
     except HTTPException:
         raise
     except Exception as e:
         logger.exception("Unhandled error while analyzing resume")
-        raise HTTPException(status_code=500, detail="Internal error while analyzing the resume") from e
+        raise HTTPException(status_code=500, detail=f"Internal error: {str(e)}") from e
 
 @app.get("/admin/stats")
 async def get_stats():
