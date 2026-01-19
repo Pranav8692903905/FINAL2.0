@@ -13,7 +13,8 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 import mysql.connector
 
-from resume_parser import ResumeParser
+# Use the enhanced parser
+from resume_parser_enhanced import ResumeParser, ResumeParserEnhanced
 from database import Database, ResumeData
 from courses import get_courses_by_field
 from src.helper import extract_text_from_pdf, extract_keywords as local_extract_keywords, analyze_resume as run_analysis
@@ -273,10 +274,28 @@ async def analyze_resume_endpoint(file: UploadFile = File(...)):
     return AnalysisOut(summary=summary, gaps=gaps, roadmap=roadmap)
 
 @app.post("/api/keywords")
-async def extract_keywords(body: KeywordsIn):
+async def extract_keywords_endpoint(body: KeywordsIn):
     """Extract keywords from resume summary"""
     keywords, _ = local_extract_keywords(body.summary, limit=12)
     return {"keywords": keywords}
+
+@app.post("/api/extract-skills")
+async def extract_skills_from_resume(file: UploadFile = File(...)):
+    """Extract skills and keywords directly from resume file"""
+    if not file.filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Only PDF files are supported")
+
+    data = await file.read()
+
+    class _U:
+        def __init__(self, b: bytes):
+            self._b = b
+        def read(self):
+            return self._b
+
+    resume_text = extract_text_from_pdf(_U(data))
+    keywords, keyword_list = local_extract_keywords(resume_text, limit=12)
+    return {"keywords": keywords, "keyword_list": keyword_list}
 
 @app.get("/api/jobs", response_model=JobsOut)
 async def get_jobs(keywords: str, rows: int = 60):

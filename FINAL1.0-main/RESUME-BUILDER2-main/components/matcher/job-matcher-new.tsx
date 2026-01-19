@@ -82,19 +82,19 @@ export function JobMatcherNew() {
   }
 
   const fetchJobRecommendations = async () => {
-    if (!analysisResult) return
+    if (!analysisResult || !uploadedResume) return
 
     setIsFetchingJobs(true)
     setError("")
 
     try {
-      // Extract keywords from summary
-      const keywordsResponse = await fetch(`/api/keywords`, {
+      // Extract keywords directly from the uploaded resume file  
+      const formData = new FormData()
+      formData.append("file", uploadedResume)
+      
+      const keywordsResponse = await fetch(`/api/extract-skills`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ summary: analysisResult.summary }),
+        body: formData,
       })
 
       if (!keywordsResponse.ok) {
