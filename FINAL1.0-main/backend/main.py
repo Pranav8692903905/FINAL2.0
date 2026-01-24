@@ -16,7 +16,7 @@ import mysql.connector
 # Use the enhanced parser
 from resume_parser_enhanced import ResumeParser, ResumeParserEnhanced
 from database import Database, ResumeData
-from courses import get_courses_by_field
+from courses import get_courses_by_field, get_personalized_courses
 from src.helper import extract_text_from_pdf, extract_keywords as local_extract_keywords, analyze_resume as run_analysis
 from src.job_api import fetch_rss_jobs
 from pydantic import BaseModel
@@ -158,14 +158,52 @@ async def upload_resume(file: UploadFile = File(...)):
             logger.exception("Failed to calculate score")
             score = 50
         
-        # Get recommended courses
+        # Get personalized course recommendations based on missing skills
         try:
-            courses = get_courses_by_field(analysis['field'])
+            courses = get_personalized_courses(
+                user_skills=resume_data.get('skills', []),
+                field=analysis['field'],
+                recommended_skills=analysis.get('recommended_skills', []),
+                max_courses=8
+            )
+            logger.info(f"Generated {len(courses)} personalized course recommendations")
         except Exception as course_err:
-            logger.exception("Failed to get courses")
-            courses = []
+            logger.exception("Failed to get personalized courses, falling back to field courses")
+            courses = get_courses_by_field(analysis['field'])
         
         # Prepare response
+        # Basic field validations
+        def _is_valid_email(email: str) -> bool:
+            if not email or not isinstance(email, str):
+                return False
+            import re
+            return re.match(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$", email) is not None
+
+        def _is_valid_phone(phone: str) -> bool:
+            if not phone or not isinstance(phone, str):
+                return False
+            digits = "".join(ch for ch in phone if ch.isdigit())
+            # Consider valid if 10-14 digits
+            return 10 <= len(digits) <= 14
+
+        def _is_valid_name(name: str) -> bool:
+            if not name or not isinstance(name, str):
+                return False
+            import re
+            if name.strip().lower() in {"unknown", "professional", "n/a"}:
+                return False
+            if any(ch.isdigit() for ch in name):
+                return False
+            # Must contain letters and at least one space or be 3+ letters
+            letters = re.sub(r"[^A-Za-z\s]", "", name).strip()
+            return bool(letters) and (" " in letters or len(letters) >= 3)
+
+        validations = {
+            "name": _is_valid_name(resume_data.get('name')),
+            "email": _is_valid_email(resume_data.get('email')),
+            "phone": _is_valid_phone(resume_data.get('phone')),
+        }
+
         response_data = {
             "name": resume_data.get('name', 'Unknown'),
             "email": resume_data.get('email', 'N/A'),
@@ -178,8 +216,9 @@ async def upload_resume(file: UploadFile = File(...)):
             "level": analysis.get('level', 'Fresher'),
             "field": analysis.get('field', 'General IT'),
             "recommended_skills": analysis.get('recommended_skills', []),
-            "courses": courses[:5] if courses else [],
-            "filename": file.filename
+            "courses": courses[:8] if courses else [],  # Up to 8 personalized courses
+            "filename": file.filename,
+            "validations": validations,
         }
         
         # Save to database (non-blocking)

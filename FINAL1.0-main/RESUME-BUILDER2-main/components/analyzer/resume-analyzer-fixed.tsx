@@ -26,6 +26,11 @@ interface AnalysisData {
     url?: string
   }>
   filename: string
+  validations?: {
+    name: boolean
+    email: boolean
+    phone: boolean
+  }
 }
 
 export function ResumeAnalyzer() {
@@ -106,7 +111,19 @@ export function ResumeAnalyzer() {
         body: formData,
       })
 
-      const data = await response.json()
+      const contentType = response.headers.get('content-type') || ''
+      let data: any
+      if (contentType.includes('application/json')) {
+        try {
+          data = await response.json()
+        } catch (parseErr) {
+          const txt = await response.text().catch(() => '')
+          throw new Error(`Invalid JSON from server${txt ? `: ${txt.slice(0, 160)}...` : ''}`)
+        }
+      } else {
+        const txt = await response.text().catch(() => '')
+        throw new Error(`Server did not return JSON${txt ? `: ${txt.slice(0, 160)}...` : ''}`)
+      }
 
       if (!response.ok) {
         const errorMsg = data?.detail || `HTTP ${response.status} Error`
@@ -129,7 +146,8 @@ export function ResumeAnalyzer() {
         field: data?.field || "General IT",
         recommended_skills: Array.isArray(data?.recommended_skills) ? data.recommended_skills : [],
         courses: Array.isArray(data?.courses) ? data.courses : [],
-        filename: data?.filename || uploadedFile.name
+        filename: data?.filename || uploadedFile.name,
+        validations: data?.validations
       }
 
       setAnalysisData(normalizedData)
@@ -153,6 +171,33 @@ export function ResumeAnalyzer() {
     if (score >= 80) return "bg-green-500/20 text-green-300 border-green-500/50"
     if (score >= 60) return "bg-yellow-500/20 text-yellow-300 border-yellow-500/50"
     return "bg-red-500/20 text-red-300 border-red-500/50"
+  }
+
+  const isValidEmail = (email: string): boolean => {
+    return /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email || '')
+  }
+
+  const isValidPhone = (phone: string): boolean => {
+    const digits = (phone || '').replace(/\D/g, '')
+    return digits.length >= 10 && digits.length <= 14
+  }
+
+  const isValidName = (name: string): boolean => {
+    if (!name) return false
+    const lowered = name.trim().toLowerCase()
+    if (["unknown", "professional", "n/a"].includes(lowered)) return false
+    if (/\d/.test(name)) return false
+    const letters = name.replace(/[^A-Za-z\s]/g, '').trim()
+    return !!letters && (letters.includes(' ') || letters.length >= 3)
+  }
+
+  const getValidation = (field: 'name'|'email'|'phone'): boolean => {
+    if (analysisData?.validations && typeof analysisData.validations[field] === 'boolean') {
+      return !!analysisData.validations[field]
+    }
+    if (field === 'email') return isValidEmail(analysisData?.email || '')
+    if (field === 'phone') return isValidPhone(analysisData?.phone || '')
+    return isValidName(analysisData?.name || '')
   }
 
   const downloadReport = () => {
@@ -286,15 +331,21 @@ export function ResumeAnalyzer() {
               <div class="info-grid">
                 <div class="info-item">
                   <div class="info-label">Name</div>
-                  <div class="info-value">${analysisData.name || 'N/A'}</div>
+                  <div class="info-value">
+                    ${analysisData.name || 'N/A'}
+                  </div>
                 </div>
                 <div class="info-item">
                   <div class="info-label">Email</div>
-                  <div class="info-value">${analysisData.email || 'N/A'}</div>
+                  <div class="info-value">
+                    ${analysisData.email || 'N/A'}
+                  </div>
                 </div>
                 <div class="info-item">
                   <div class="info-label">Phone</div>
-                  <div class="info-value">${analysisData.phone || 'N/A'}</div>
+                  <div class="info-value">
+                    ${analysisData.phone || 'N/A'}
+                  </div>
                 </div>
                 <div class="info-item">
                   <div class="info-label">Resume Pages</div>
@@ -518,15 +569,30 @@ export function ResumeAnalyzer() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="p-4 bg-blue-500/10 rounded-lg border border-blue-500/20">
                     <p className="text-xs text-gray-400 uppercase font-semibold">Name</p>
-                    <p className="text-lg font-semibold text-white mt-1">{analysisData.name}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-lg font-semibold text-white">{analysisData.name}</p>
+                      <Badge className={getValidation('name') ? "bg-emerald-500/30 text-emerald-300 border-emerald-500/50" : "bg-red-500/30 text-red-300 border-red-500/50"}>
+                        {getValidation('name') ? 'Valid' : 'Invalid'}
+                      </Badge>
+                    </div>
                   </div>
                   <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
                     <p className="text-xs text-gray-400 uppercase font-semibold">Email</p>
-                    <p className="text-lg font-semibold text-white mt-1 break-all">{analysisData.email}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-lg font-semibold text-white break-all">{analysisData.email}</p>
+                      <Badge className={getValidation('email') ? "bg-emerald-500/30 text-emerald-300 border-emerald-500/50" : "bg-red-500/30 text-red-300 border-red-500/50"}>
+                        {getValidation('email') ? 'Valid' : 'Invalid'}
+                      </Badge>
+                    </div>
                   </div>
                   <div className="p-4 bg-purple-500/10 rounded-lg border border-purple-500/20">
                     <p className="text-xs text-gray-400 uppercase font-semibold">Phone</p>
-                    <p className="text-lg font-semibold text-white mt-1">{analysisData.phone}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-lg font-semibold text-white">{analysisData.phone}</p>
+                      <Badge className={getValidation('phone') ? "bg-emerald-500/30 text-emerald-300 border-emerald-500/50" : "bg-red-500/30 text-red-300 border-red-500/50"}>
+                        {getValidation('phone') ? 'Valid' : 'Invalid'}
+                      </Badge>
+                    </div>
                   </div>
                   <div className="p-4 bg-orange-500/10 rounded-lg border border-orange-500/20">
                     <p className="text-xs text-gray-400 uppercase font-semibold">Resume Pages</p>
@@ -546,36 +612,47 @@ export function ResumeAnalyzer() {
                   </div>
                 </div>
 
-                {/* Skills Section */}
-                {analysisData.skills.length > 0 && (
+                {/* Skills Section - ONLY FOUND SKILLS FROM RESUME */}
+                {analysisData.skills && analysisData.skills.length > 0 && (
                   <div className="border-t border-slate-700/50 pt-6 space-y-3">
                     <h3 className="font-semibold text-white flex items-center gap-2">
-                      🛠️ Found Skills ({analysisData.skills.length})
+                      🛠️ Found Skills in Your Resume ({analysisData.skills.length})
                     </h3>
+                    <p className="text-xs text-gray-400">Skills detected from your resume</p>
                     <div className="flex flex-wrap gap-2">
                       {analysisData.skills.map((skill) => (
                         <Badge
                           key={skill}
                           className="bg-emerald-500/30 text-emerald-300 border border-emerald-500/50"
                         >
-                          {skill}
+                          ✓ {skill}
                         </Badge>
                       ))}
                     </div>
                   </div>
                 )}
 
-                {/* Recommended Skills */}
-                {analysisData.recommended_skills.length > 0 && (
+                {analysisData.skills && analysisData.skills.length === 0 && (
                   <div className="border-t border-slate-700/50 pt-6 space-y-3">
                     <h3 className="font-semibold text-white flex items-center gap-2">
-                      ✅ Recommended Skills to Add ({analysisData.recommended_skills.length})
+                      🛠️ Found Skills in Your Resume (0)
                     </h3>
+                    <p className="text-xs text-gray-400">No recognizable technical skills found in the resume</p>
+                  </div>
+                )}
+
+                {/* Recommended Skills - SKILLS NOT FOUND BUT USEFUL */}
+                {analysisData.recommended_skills && analysisData.recommended_skills.length > 0 && (
+                  <div className="border-t border-slate-700/50 pt-6 space-y-3">
+                    <h3 className="font-semibold text-white flex items-center gap-2">
+                      ➕ Recommended Skills to Add ({analysisData.recommended_skills.length})
+                    </h3>
+                    <p className="text-xs text-gray-400">These skills would strengthen your resume for your field</p>
                     <div className="flex flex-wrap gap-2">
                       {analysisData.recommended_skills.map((skill) => (
                         <Badge
                           key={skill}
-                          className="bg-yellow-500/30 text-yellow-300 border border-yellow-500/50"
+                          className="bg-blue-500/30 text-blue-300 border border-blue-500/50"
                         >
                           + {skill}
                         </Badge>

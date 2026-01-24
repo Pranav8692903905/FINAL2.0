@@ -372,7 +372,8 @@ class ResumeParserEnhanced:
             'Angular': ['angular', 'angularjs'],
             'Vue': ['vue', 'vuejs'],
             'Next.js': ['next.js', 'nextjs'],
-            'Node.js': ['node.js', 'nodejs', 'npm'],
+            # Add loose 'node' so formats like 'REACT.NODE.MONGO.' are caught
+            'Node.js': ['node.js', 'nodejs', 'node', 'npm', 'mern'],
             'Django': ['django', 'django rest'],
             'Flask': ['flask'],
             'FastAPI': ['fastapi'],
@@ -402,9 +403,21 @@ class ResumeParserEnhanced:
         
         found_skills = []
         
+        # Normalize dotted/upper tokens (e.g., "REACT.NODE.MONGO.")
+        tokens = re.split(r'[\s,;\|\/]+', text_lower)
+        dotted_parts = []
+        for tok in tokens:
+            dotted_parts.extend(tok.split('.'))
+        tokens.extend(dotted_parts)
+
         for skill, patterns in skills_dict.items():
             for pattern in patterns:
-                if re.search(r'\b' + pattern + r'\b', text_lower):
+                boundary_pattern = r'\b' + pattern + r'\b'
+                if re.search(boundary_pattern, text_lower):
+                    found_skills.append(skill)
+                    break
+                # Also check token list to catch odd punctuation-separated skills
+                if pattern in tokens:
                     found_skills.append(skill)
                     break
         
