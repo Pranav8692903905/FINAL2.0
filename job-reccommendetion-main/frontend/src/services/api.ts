@@ -22,7 +22,7 @@ async function analyzeResume(file: File): Promise<Analysis> {
     }
     
     return data as Analysis
-  } catch (err) {
+  } catch (err: unknown) {
     console.error('API error details:', err)
     if (axios.isAxiosError(err)) {
       if (err.response) {
