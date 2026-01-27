@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import UploadResume from '@/components/UploadResume'
 import AnalysisResults from '@/components/AnalysisResults'
 import JobList from '@/components/JobList'
